@@ -6,7 +6,9 @@
 		<title>Document</title>
 	</head>
 	<body>
-		Hello World
+		<h1>This is home page</h1>
+		{{ range .films }}
+		<p>{{ .Title }} - {{ .Director }}</p>
+		{{ end}}
 	</body>
 </html>
-

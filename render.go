@@ -5,6 +5,6 @@ import (
 )
 
 func renderTemplate(file string) *template.Template {
-	templ := template.Must(template.ParseFiles("templates/" + file))
+	templ := template.Must(template.ParseFiles("./src/templates/" + file))
 	return templ
 }

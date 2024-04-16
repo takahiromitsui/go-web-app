@@ -3,13 +3,13 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="/src/output.css" />
+		<link rel="stylesheet" href="styles.css" />
 		<title>Document</title>
 	</head>
-	<body>
+	<body class="container mx-auto px-4">
 		<h1>This is home page</h1>
 		{{ range .films }}
-		<h1 class=" text-blue">{{.Title}}</h1>
+		<h1>{{.Title}}</h1>
 		<p>{{ .Title }} - {{ .Director }}</p>
 		{{ end}}
 	</body>

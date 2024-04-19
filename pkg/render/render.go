@@ -5,6 +5,6 @@ import (
 )
 
 func RenderTemplate(file string) *template.Template {
-	templ := template.Must(template.ParseFiles("./src/public/" + file))
+	templ := template.Must(template.ParseFiles("./src/public/" + file, "./src/public/base.layout.tmpl"))
 	return templ
 }

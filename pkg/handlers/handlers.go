@@ -13,16 +13,9 @@ type Film struct {
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
-	films := map[string][]Film{
-		"films": {
-			{Title: "The Shawshank Redemption", Director: "Frank Darabont"},
-			{Title: "The Godfather", Director: "Francis Ford Coppola"},
-			{Title: "The Dark Knight", Director: "Christopher Nolan"},
-		},
-	}
-	render.RenderTemplate("home.page.html").Execute(w, films)
+	render.RenderTemplate("home.page.tmpl").Execute(w, nil)
 }
 
 func About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate("about.page.html").Execute(w, nil)
+	render.RenderTemplate("about.page.tmpl").Execute(w, nil)
 }

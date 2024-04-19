@@ -1,7 +1,9 @@
-package main
+package handlers
 
 import (
 	"net/http"
+
+	"github.com/takahiromitsui/go-web-app/pkg/render"
 )
 
 
@@ -18,9 +20,9 @@ func Home(w http.ResponseWriter, r *http.Request) {
 			{Title: "The Dark Knight", Director: "Christopher Nolan"},
 		},
 	}
-	renderTemplate("home.page.html").Execute(w, films)
+	render.RenderTemplate("home.page.html").Execute(w, films)
 }
 
 func About(w http.ResponseWriter, r *http.Request) {
-	renderTemplate("about.page.html").Execute(w, nil)
+	render.RenderTemplate("about.page.html").Execute(w, nil)
 }

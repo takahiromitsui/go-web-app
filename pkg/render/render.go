@@ -1,10 +1,10 @@
-package main
+package render
 
 import (
 	"html/template"
 )
 
-func renderTemplate(file string) *template.Template {
+func RenderTemplate(file string) *template.Template {
 	templ := template.Must(template.ParseFiles("./src/public/" + file))
 	return templ
 }

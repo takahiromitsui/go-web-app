@@ -13,9 +13,9 @@ type Film struct {
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate("home.page.tmpl").Execute(w, nil)
+	render.RenderTemplate(w, "home")
 }
 
 func About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate("about.page.tmpl").Execute(w, nil)
+	render.RenderTemplate(w, "about")
 }

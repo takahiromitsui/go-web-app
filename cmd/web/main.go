@@ -2,16 +2,23 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
+	"github.com/takahiromitsui/go-web-app/pkg/config"
 	"github.com/takahiromitsui/go-web-app/pkg/handlers"
+	"github.com/takahiromitsui/go-web-app/pkg/render"
 )
 
 const port = ":8000"
 
 func main() {
-	fs := http.FileServer(http.Dir("src/public"))
-	http.Handle("/public/", http.StripPrefix("/public/", fs))
+	var app config.AppConfig
+	tc, err := render.CreateTemplateToCache()
+	if err != nil {
+		log.Fatal("cannot create template cache")
+	}
+	app.TemplatesCache = tc
 
 	http.HandleFunc("/", handlers.Home)
 	http.HandleFunc("/about", handlers.About)

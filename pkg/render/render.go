@@ -1,55 +1,65 @@
 package render
 
 import (
-	"fmt"
+	"bytes"
 	"html/template"
 	"log"
 	"net/http"
+	"path/filepath"
 )
-
-// func RenderTemplate(file string) *template.Template {
-// 	templ := template.Must(template.ParseFiles("./src/public/" + file, "./src/public/base.layout.tmpl"))
-// 	return templ
-// }
-
-var tc = make(map[string]*template.Template)
-
 
 
 func RenderTemplate(w http.ResponseWriter, t string) {
-	var tmpl *template.Template
-	var err error
-
-	// check to see if we already have the template in the cache
-	_, inMap := tc[t]
-	if !inMap {
-		// need to add the template to the cache
-		log.Println("Creating template and adding to cache")
-		err = CreateTemplateToCache(t)
-		if err != nil {
-			log.Println("error creating template cache", err)
-		}
-	} else {
-		log.Println("Using template from cache")
-	}
-	tmpl = tc[t]
-	err = tmpl.Execute(w, nil)
+	// create a template cache
+	tc, err := CreateTemplateToCache()
 	if err != nil {
-		log.Println("error executing template", err)
-		return
+		log.Fatal(err)
+	}
+	// get requested template from cache
+	tmpl, ok := tc[t]
+	// render the template
+	if !ok {
+		log.Fatal("Could not get template from cache")
+	}
+	buf := new(bytes.Buffer)
+	err = tmpl.Execute(buf, nil)
+	if err != nil {
+		log.Println(err)
+	}
+	_, err = buf.WriteTo(w)
+	if err != nil {
+		log.Println(err)
 	}
 }
 
-func CreateTemplateToCache(t string) error {
-	templates := []string{
-		fmt.Sprintf("./src/public/%s.page.tmpl", t),
-		"./src/public/base.layout.tmpl",
+
+func CreateTemplateToCache() (map[string]*template.Template, error) {
+	// create a new template cache
+	tc := map[string]*template.Template{}
+	// get all page templates
+	pages, err := filepath.Glob("./src/public/*.page.tmpl")
+  if err != nil {
+		return tc, err
 	}
-	// parse the template files...
-	tmpl, err := template.ParseFiles(templates...)
-	if err != nil {
-		return err
+	// loop through all page templates
+	for _, page := range pages {
+		name := filepath.Base(page)
+		ts, err := template.New(name).ParseFiles(page)
+		if err != nil {
+			return tc, err
+		}
+		// get the base layout template
+		matches, err := filepath.Glob("./src/public/*.layout.tmpl")
+		if err != nil {
+			return tc, err
+		}
+		if len(matches) > 0 {
+			ts, err = ts.ParseGlob("./src/public/*.layout.tmpl")
+			if err != nil {
+				return tc, err
+			}
+		}
+		tc[name] = ts
 	}
-	tc[t] = tmpl
-	return nil
+	return tc, nil
 }

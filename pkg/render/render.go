@@ -6,15 +6,20 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/takahiromitsui/go-web-app/pkg/config"
 )
 
+var app *config.AppConfig
+
+// NewTemplate sets the config for the template package
+func NewTemplate(a *config.AppConfig) {
+	app = a
+}
 
 func RenderTemplate(w http.ResponseWriter, t string) {
-	// create a template cache
-	tc, err := CreateTemplateToCache()
-	if err != nil {
-		log.Fatal(err)
-	}
+	// get the template cache from the app config
+	tc := app.TemplatesCache
 	// get requested template from cache
 	tmpl, ok := tc[t]
 	// render the template
@@ -22,7 +27,7 @@ func RenderTemplate(w http.ResponseWriter, t string) {
 		log.Fatal("Could not get template from cache")
 	}
 	buf := new(bytes.Buffer)
-	err = tmpl.Execute(buf, nil)
+	err := tmpl.Execute(buf, nil)
 	if err != nil {
 		log.Println(err)
 	}

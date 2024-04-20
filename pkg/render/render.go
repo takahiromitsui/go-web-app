@@ -18,6 +18,10 @@ func NewTemplate(a *config.AppConfig) {
 	app = a
 }
 
+func AddDefaultData(td *models.TemplateData) *models.TemplateData {
+	return td
+}
+
 func RenderTemplate(w http.ResponseWriter, t string, td *models.TemplateData) {
 	var tc map[string]*template.Template
 	if app.UseCache {
@@ -35,6 +39,7 @@ func RenderTemplate(w http.ResponseWriter, t string, td *models.TemplateData) {
 		log.Fatal("Could not get template from cache")
 	}
 	buf := new(bytes.Buffer)
+	td = AddDefaultData(td)
 	err := tmpl.Execute(buf, td)
 	if err != nil {
 		log.Println(err)

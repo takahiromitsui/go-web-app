@@ -14,12 +14,13 @@ import (
 
 const port = ":8000"
 var app config.AppConfig
+var session *scs.SessionManager
 
 func main() {
 	// change this to true when in production
 	app.InProduction = false
 
-	session := scs.New()
+	session = scs.New()
 	session.Lifetime = 24 * time.Hour
 	session.Cookie.Persist = true // session cookie persists after the browser is closed => later store it in a database
 	session.Cookie.SameSite = http.SameSiteLaxMode

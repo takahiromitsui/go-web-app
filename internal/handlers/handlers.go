@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/takahiromitsui/go-web-app/internal/config"
+	"github.com/takahiromitsui/go-web-app/internal/forms"
 	"github.com/takahiromitsui/go-web-app/internal/models"
 	"github.com/takahiromitsui/go-web-app/internal/render"
 )
@@ -80,5 +81,38 @@ func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{})
+	render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{
+		Form: forms.New(nil),
+	})
+}
+
+// POST /make-reservation
+func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	reservation := models.Reservation{
+		FirstName: r.Form.Get("first_name"),
+		LastName: r.Form.Get("last_name"),
+		Email: r.Form.Get("email"),
+		Phone: r.Form.Get("phone"),
+	}
+	form := forms.New(r.PostForm)
+
+	form.Has("first_name", r)
+	form.Has("last_name", r)
+	form.Has("email", r)
+	form.Has("phone", r)
+
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["reservation"] = reservation
+		render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{
+			Form: form,
+			Data: data,
+		})
+		return
+	}
 }

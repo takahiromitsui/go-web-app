@@ -19,28 +19,10 @@ var app config.AppConfig
 var session *scs.SessionManager
 
 func main() {
-	// what am I going to put in the session
-	gob.Register(models.Reservation{})
-	// change this to true when in production
-	app.InProduction = false
-
-	session = scs.New()
-	session.Lifetime = 24 * time.Hour
-	session.Cookie.Persist = true // session cookie persists after the browser is closed => later store it in a database
-	session.Cookie.SameSite = http.SameSiteLaxMode
-	session.Cookie.Secure = app.InProduction // set to true in production
-
-	app.Session = session
-
-	tc, err := render.CreateTemplateToCache()
+	err := run()
 	if err != nil {
-		log.Fatal("cannot create template cache")
+		log.Fatal(err)
 	}
-	app.TemplatesCache = tc
-	app.UseCache = false
-	render.NewTemplate(&app)
-	repo := handlers.NewRepo(&app)
-	handlers.NewHandlers(repo)
 
 	fmt.Println("Server running on port", port)
 	srv := &http.Server{
@@ -53,3 +35,29 @@ func main() {
 	}
 }
 
+func run() error {
+		// what am I going to put in the session
+		gob.Register(models.Reservation{})
+		// change this to true when in production
+		app.InProduction = false
+	
+		session = scs.New()
+		session.Lifetime = 24 * time.Hour
+		session.Cookie.Persist = true // session cookie persists after the browser is closed => later store it in a database
+		session.Cookie.SameSite = http.SameSiteLaxMode
+		session.Cookie.Secure = app.InProduction // set to true in production
+	
+		app.Session = session
+	
+		tc, err := render.CreateTemplateToCache()
+		if err != nil {
+			log.Fatal("cannot create template cache")
+			return err
+		}
+		app.TemplatesCache = tc
+		app.UseCache = false
+		repo := handlers.NewRepo(&app)
+		handlers.NewHandlers(repo)
+		render.NewTemplate(&app)
+	return nil
+}

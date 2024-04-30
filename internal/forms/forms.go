@@ -1,6 +1,7 @@
 package forms
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
@@ -42,4 +43,14 @@ func (f *Form) Required(fields ...string) {
 // Valid returns true if there are no errors
 func (f *Form)Valid() bool {
 	return len(f.Errors) == 0
+}
+
+// MinLength checks for string minimum length
+func (f *Form) MinLength(field string, length int, r *http.Request) bool {
+	x := r.Form.Get(field)
+	if len(x) < length {
+		f.Errors.Add(field, fmt.Sprintf("This field is too short (minimum is %d characters)", length))
+		return false
+	}
+	return true
 }

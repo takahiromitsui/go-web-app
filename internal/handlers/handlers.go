@@ -123,3 +123,8 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// GET /reservation-summary
+func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "reservation-summary.page.tmpl", &models.TemplateData{})
+}

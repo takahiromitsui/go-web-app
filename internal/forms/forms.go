@@ -64,3 +64,12 @@ func (f *Form) IsEmail(field string) bool {
 	}
 	return true
 }
+
+// IsNumeric checks for valid number
+func (f *Form) IsNumeric(field string) bool {
+	if !govalidator.IsNumeric(f.Get(field)) {
+		f.Errors.Add(field, "This field must be a number")
+		return false
+	}
+	return true
+}

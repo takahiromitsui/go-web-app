@@ -14,11 +14,11 @@ func TestAddDefaultData(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	session.Put(r.Context(), "flash", "123")
 	result := AddDefaultData(&td, r)
-	if result == nil {
-		t.Error("returned nil")
+	if result.Flash != "123" {
+		t.Error("expected 123 but got", result.Flash)
 	}
-
 }
 
 func getSession()(*http.Request, error) {

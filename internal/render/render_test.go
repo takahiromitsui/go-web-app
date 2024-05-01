@@ -54,3 +54,15 @@ func TestRenderTemplate(t *testing.T) {
 		t.Error("rendered template that does not exist")
 	}
 }
+
+func TestNewTemplates(t *testing.T) {
+	NewTemplate(app)
+}
+
+func TestCreateTemplateToCache(t *testing.T) {
+	pathToTemplates = "./../../templates"
+	_, err := CreateTemplateToCache()
+	if err != nil {
+		t.Error(err)
+	}
+}

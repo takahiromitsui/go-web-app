@@ -11,6 +11,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/takahiromitsui/go-web-app/internal/config"
 	"github.com/takahiromitsui/go-web-app/internal/handlers"
+	"github.com/takahiromitsui/go-web-app/internal/helpers"
 	"github.com/takahiromitsui/go-web-app/internal/models"
 	"github.com/takahiromitsui/go-web-app/internal/render"
 )
@@ -68,5 +69,6 @@ func run() error {
 		repo := handlers.NewRepo(&app)
 		handlers.NewHandlers(repo)
 		render.NewTemplate(&app)
+		helpers.NewHelpers(&app)
 	return nil
 }

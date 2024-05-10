@@ -5,10 +5,13 @@ import (
 	"net/http"
 
 	"github.com/takahiromitsui/go-web-app/internal/config"
+	"github.com/takahiromitsui/go-web-app/internal/driver"
 	"github.com/takahiromitsui/go-web-app/internal/forms"
 	"github.com/takahiromitsui/go-web-app/internal/helpers"
 	"github.com/takahiromitsui/go-web-app/internal/models"
 	"github.com/takahiromitsui/go-web-app/internal/render"
+	"github.com/takahiromitsui/go-web-app/internal/repository"
+	"github.com/takahiromitsui/go-web-app/internal/repository/dbrepo"
 )
 
 // Repo the repository used by the handlers
@@ -17,12 +20,14 @@ var Repo *Repository
 // Repository is the repository type
 type Repository struct{
 	App *config.AppConfig
+	DB repository.DatabaseRepo
 }
 
 // NewRepo creates a new repository
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
+		DB: dbrepo.NewPostgresRepo(db.SQL, a),
 	}
 }
 

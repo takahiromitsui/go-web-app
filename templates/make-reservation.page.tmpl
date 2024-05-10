@@ -43,6 +43,43 @@
 				</div>
 
 				<div class="form-group">
+					<label for="start_date">Start Date:</label>
+					{{with .Form.Errors.Get "start_date"}}
+					<label class="text-danger">
+						{{.}}
+					</label>
+					{{ end }}
+					<input
+						class="form-control"
+						id="start_date"
+						autocomplete="off"
+						type="date"
+						name="start_date"
+						value="{{ $res.StartDate }}"
+						required
+					/>
+				</div>
+
+				<div class="form-group">
+					<label for="end_date">End Date:</label>
+					{{with .Form.Errors.Get "end_date"}}
+					<label class="text-danger">
+						{{.}}
+					</label>
+					{{ end }}
+					<input
+						class="form-control"
+						id="end_date"
+						autocomplete="off"
+						type="date"
+						name="end_date"
+						value="{{ $res.EndDate }}"
+						required
+					/>
+				
+				<input type="hidden" name="room_id" value="1" />
+
+				<div class="form-group">
 					<label for="email">Email:</label>
 					{{with .Form.Errors.Get "email"}}
 					<label class="text-danger">

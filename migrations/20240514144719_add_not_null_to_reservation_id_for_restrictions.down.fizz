@@ -1,2 +1,2 @@
-sql("DELETE FROM room_restrictions WHERE restriction_id IS NULL")
-change_column("room_restrictions", "restriction_id", "integer", {"null": false})
+sql("DELETE FROM room_restrictions WHERE reservation_id IS NULL")
+change_column("room_restrictions", "reservation_id", "integer", {"null": false})
